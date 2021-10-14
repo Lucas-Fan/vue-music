@@ -1,7 +1,7 @@
 <!--
  * @Author: fzyt
  * @Date: 2021-10-10 21:54:22
- * @LastEditTime: 2021-10-11 23:47:35
+ * @LastEditTime: 2021-10-12 00:31:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /vue-music/src/components/base/scroll/scroll.vue
@@ -30,10 +30,11 @@ export default {
   emits: ['scroll'],
   setup (props, { emit }) {
     const rootRef = ref(null)
-    useScroll(rootRef, props, emit)
+    const scroll = useScroll(rootRef, props, emit)
 
     return {
       rootRef,
+      scroll,
     }
   },
 }

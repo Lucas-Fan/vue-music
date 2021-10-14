@@ -1,18 +1,18 @@
 <!--
  * @Author: fzyt
  * @Date: 2021-10-11 23:24:38
- * @LastEditTime: 2021-10-12 00:22:21
+ * @LastEditTime: 2021-10-13 00:20:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /vue-music/src/components/base/index-list/index-list.vue
 -->
 <template>
-  <scroll class="index-list" :probe-type="3" @scroll="onScroll">
+  <scroll ref="scrollRef" class="index-list" :probe-type="3" @scroll="onScroll">
     <ul ref="groupRef">
       <li v-for="group in data" :key="group.title" class="group">
         <h2 class="title">{{group.title}}</h2>
         <ul>
-          <li v-for="item in group.list" :key="item.id" class="item">
+          <li v-for="item in group.list" class="item" :key="item.id" @click="onItemClick(item)">
             <img class="avatar" v-lazy="item.pic" />
             <span class="name">{{item.name}}</span>
           </li>
@@ -22,12 +22,29 @@
     <div class="fixed" v-show="fixedTitle" :style="fixedStyle">
       <div class="fixed-title">{{fixedTitle}}</div>
     </div>
+    <div
+      class="shortcut"
+      @touchstart.stop.prevent="onShortcutTouchStart"
+      @touchmove.stop.prevent="onShortcutTouchMove"
+      @touchend.stop.prevent
+    >
+      <ul>
+        <li
+          v-for="(item, index) in shortcutList"
+          class="item"
+          :key="item"
+          :data-index="index"
+          :class="{'current':currentIndex===index}"
+        >{{item}}</li>
+      </ul>
+    </div>
   </scroll>
 </template>
 
 <script>
 import Scroll from '@/components/base/scroll/scroll'
 import useFixed from './use-fixed'
+import useShortcut from './use-shortcut'
 
 export default {
   name: 'index-list',
@@ -42,13 +59,27 @@ export default {
       },
     },
   },
-  setup (props) {
-    const { groupRef, onScroll, fixedTitle, fixedStyle } = useFixed(props)
+  emits: ['select'],
+  setup (props, { emit }) {
+    const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
+    const { shortcutList, scrollRef, onShortcutTouchStart, onShortcutTouchMove } = useShortcut(props, groupRef)
+
+    function onItemClick (item) {
+      emit('select', item)
+    }
     return {
+      onItemClick,
+      // fixed
       groupRef,
       onScroll,
       fixedTitle,
       fixedStyle,
+      currentIndex,
+      // shortcut
+      shortcutList,
+      scrollRef,
+      onShortcutTouchStart,
+      onShortcutTouchMove,
     }
   },
 }

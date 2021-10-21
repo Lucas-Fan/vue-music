@@ -1,7 +1,7 @@
 <!--
  * @Author: fzyt
  * @Date: 2021-10-13 21:51:25
- * @LastEditTime: 2021-10-13 23:57:32
+ * @LastEditTime: 2021-10-19 23:54:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /vue-music/src/components/music-list/music-list.vue
@@ -19,6 +19,7 @@
       class="list"
       :style="scrollStyle"
       v-loading="loading"
+      v-no-result:[noResultText]="noResult"
       :probe-type="3"
       @scroll="onScroll"
     >
@@ -51,6 +52,10 @@ export default {
     title: String,
     pic: String,
     loading: Boolean,
+    noResultText: {
+      type: String,
+      default: '抱歉，没有找到可播放的歌曲',
+    },
   },
   data () {
     return {
@@ -60,6 +65,9 @@ export default {
     }
   },
   computed: {
+    noResult () {
+      return !this.loading && !this.songs.length
+    },
     bgImageStyle () {
       const scrollY = this.scrollY
       let zIndex = 0

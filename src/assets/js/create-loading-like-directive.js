@@ -3,9 +3,9 @@ import { addClass, removeClass } from '@/assets/js/dom'
 
 const relativeCls = 'g-relative'
 
-export default function createLoadingLikeDirective(Comp) {
+export default function createLoadingLikeDirective (Comp) {
   return {
-    mounted(el, binding) {
+    mounted (el, binding) {
       const app = createApp(Comp)
       const instance = app.mount(document.createElement('div'))
       const name = Comp.name
@@ -22,7 +22,7 @@ export default function createLoadingLikeDirective(Comp) {
         append(el)
       }
     },
-    updated(el, binding) {
+    updated (el, binding) {
       const title = binding.arg
       const name = Comp.name
       if (typeof title !== 'undefined') {
@@ -31,10 +31,10 @@ export default function createLoadingLikeDirective(Comp) {
       if (binding.value !== binding.oldValue) {
         binding.value ? append(el) : remove(el)
       }
-    }
+    },
   }
 
-  function append(el) {
+  function append (el) {
     const name = Comp.name
     const style = getComputedStyle(el)
     if (['absolute', 'fixed', 'relative'].indexOf(style.position) === -1) {
@@ -43,7 +43,7 @@ export default function createLoadingLikeDirective(Comp) {
     el.appendChild(el[name].instance.$el)
   }
 
-  function remove(el) {
+  function remove (el) {
     const name = Comp.name
     removeClass(el, relativeCls)
     el.removeChild(el[name].instance.$el)
